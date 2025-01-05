@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import BookingRaw from "./BookingRaw";
+import axios from "axios";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
   const url = `http://localhost:5000/bookings?email=${user?.email}`;
   useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => setBookings(data));
+    axios.get(url, {withCredentials: true}).then((res) => {
+      setBookings(res.data);
+    });
+    // fetch(url)
+    //   .then((response) => response.json())
+    //   .then((data) => setBookings(data));
   }, []);
 
   const handleDelete = (id) => {
